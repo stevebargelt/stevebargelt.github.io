@@ -1,0 +1,24 @@
+# Site settings
+title: Steve Bargelt
+email: steve@bargelt.com
+description: > # this means to ignore newlines until "baseurl:"
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://stevebargelt.com" # the base hostname & protocol for your site
+twitter_username: stevebargelt
+github_username:  stevebargelt
+
+# Build settings
+markdown: kramdown
+text:
+  pagination:
+    newer: 'Newer Posts'
+    older: 'Older Posts'
+
+permalink:    /blog/:year/:month/:day/:title/
+paginate:     5
+paginate_path: "/blog/page:num/"
+gems:
+  - jekyll-paginate
