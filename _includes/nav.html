@@ -19,9 +19,17 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 			<ul class="nav navbar-nav">
+				{% if page.url == "/" %}
 				<!-- Hidden li included to remove active class from about link when scrolled up past about section -->
 				<li class="hidden">
 					<a href="#page-top"></a>
+				</li>
+				{% endif %}
+				<li {% if page.url contains "/blog/" %}class="active"{% endif %}>
+					<a class="page-scroll" href="/blog/">Blog</a>
+				</li>
+				<li {% if page.url contains "/portfolio/" %}class="active"{% endif %}>
+					<a class="page-scroll" href="/portfolio/">Portfolio</a>
 				</li>
 				<li>
 					{% if page.url == "/" %}
@@ -29,12 +37,6 @@
 					{% else %}
 						<a class="page-scroll" href="/#about">About</a>
 					{% endif %}
-				</li>
-				<li{% if page.url contains "/blog/" %}class="active"{% endif %}>
-					<a class="page-scroll" href="/blog/">Blog</a>
-				</li>
-				<li{% if page.url contains "/portfolio/" %}class="active"{% endif %}>
-					<a class="page-scroll" href="/portfolio/">Portfolio</a>
 				</li>
 				<li>
 					{% if page.url == "/" %}
