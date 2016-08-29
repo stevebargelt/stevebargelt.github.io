@@ -1,0 +1,55 @@
+---
+layout: page
+title: My portfolio
+subtitle: Selected projects, photos, and galleries.
+---
+
+<header id="banner" class="carousel slide zoom carousel-fade" data-ride="carousel">
+  <div class="carousel-inner"><!-- Inner wrapper for slides -->
+    {% assign count = 1 %}
+    {% for image in site.static_files %}
+      {% assign bannerFolder = 'banners/'%}
+      {% if image.path contains bannerFolder %}
+        <div class="item {% if count == 1 %}active{%endif%}"> <!-- First item slider -->
+          <img src="{{image.path}}" alt="banner-img">
+<!--
+            <div class="carousel-caption overlay">
+            <div class="content">
+              <div class="text wow bounceIn" data-wow-delay="0.2s">
+              </div>
+            </div>
+          </div>  
+-->
+        </div> <!-- End first item slider -->
+      {% assign count = 9 %}
+      {% endif %}
+    {% endfor %}
+    <!-- Controls -->
+    <a class="left carousel-control" href="#banner" role="button" data-slide="prev">
+      <img src="img/06_left.png" alt="prev-img"> <!-- Left controls -->
+    </a>
+    <a class="right carousel-control" href="#banner" role="button" data-slide="next">
+      <img src="img/05_right.png" alt="next-img"> <!-- Right controls -->
+    </a>
+  </div>
+</header>
+<section id="portfolio" class="grid">
+{% assign sortedPortfolio = site.portfolio | sort:'galleryorder' %}
+{% for portfolio_item in sortedPortfolio %}
+    <figure class="effect-portfolio wow fadeIn" data-wow-duration="1s"> 
+        <img src="{{ portfolio_item.thumb_path }}" alt="portfolio link"/> 
+        <figcaption> <!-- Caption -->
+        <h2>{{ portfolio_item.title}}</h2>
+        <p>{{ portfolio_item.description}}</p>
+        <a title="{{ portfolio_item.title}}" href="{{portfolio_item.thumb_path}}" data-lightbox-gallery="{{portfolio_item.galleryname}}" data-lightbox-hidpi="{{portfolio_item.image_path}}"></a> 
+        </figcaption> <!-- End caption -->       
+    </figure> 
+    {% for image in site.static_files %}
+        {% assign galleryFolder = 'portfolio/'| append: portfolio_item.galleryname %}
+        {% if image.path contains galleryFolder %}
+            <a title="{{portfolio_item.title}}" href="{{image.path}}" data-lightbox-gallery="{{portfolio_item.galleryname}}" data-lightbox-hidpi="{{image.path}}"></a>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+</section>

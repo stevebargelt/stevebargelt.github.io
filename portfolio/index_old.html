@@ -1,0 +1,26 @@
+---
+layout: page 
+title: My portfolio
+subtitle: Selected projects, photos, and galleries. 
+---
+
+<section id="portfolio" class="grid">
+{% assign sortedPortfolio = site.portfolio | sort:'galleryorder' %}
+{% for portfolio_item in sortedPortfolio %}
+    <figure class="effect-portfolio wow fadeIn" data-wow-duration="1s"> 
+        <img src="{{ portfolio_item.thumb_path }}" alt="portfolio link"/> 
+        <figcaption> <!-- Caption -->
+        <h2>{{ portfolio_item.title}}</h2>
+        <p>{{ portfolio_item.description}}</p>
+        <a title="{{ portfolio_item.title}}" href="{{portfolio_item.thumb_path}}" data-lightbox-gallery="{{portfolio_item.galleryname}}" data-lightbox-hidpi="{{portfolio_item.image_path}}"></a> 
+        </figcaption> <!-- End caption -->       
+    </figure> 
+    {% for image in site.static_files %}
+        {% assign galleryFolder = 'portfolio/'| append: portfolio_item.galleryname %}
+        {% if image.path contains galleryFolder %}
+            <a title="{{portfolio_item.title}}" href="{{image.path}}" data-lightbox-gallery="{{portfolio_item.galleryname}}" data-lightbox-hidpi="{{image.path}}"></a>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+</section>

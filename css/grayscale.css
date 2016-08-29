@@ -138,10 +138,7 @@ a:focus {
     padding: 100px 0;
     text-align: center;
     color: #fff;
-    /*background: url(../img/intro-bg.jpg) no-repeat bottom center scroll; */
-    /*background: url(../img/Weyerhauser-HQ-Pano-HDR.jpg) no-repeat bottom center scroll;*/
-    background: url(../img/sunstreakclouds.jpg) no-repeat bottom center scroll;
-    /*background: url(../img/SeattleNight.jpg) no-repeat bottom center scroll;*/
+    background: url(/img/sunstreakclouds.jpg) no-repeat bottom center scroll;
     background-color: #000;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -163,6 +160,39 @@ a:focus {
     font-size: 18px;
 }
 
+.pageintro {
+    display: table;
+    width: 100%;
+    height: auto;
+    padding: 100px 0;
+    text-align: center;
+    color: #fff;
+    background: url(/img/pikeplaceheader.jpg) no-repeat top center scroll;
+    background-color: #000;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.pageintro .pageintro-body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.pageintro .pageintro-body .brand-heading {
+    font-size: 40px;
+    color: #333;
+}
+
+.pageintro .pageintro-body .pageintro-text {
+    font-size: 18px;
+}
+
+.blog {
+      background-color: #fff;
+      color: #000; 
+}
 @media(min-width:767px) {
     .intro {
         height: 100%;
