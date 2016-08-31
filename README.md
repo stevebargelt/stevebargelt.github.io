@@ -81,7 +81,7 @@ I think the values are self-explainatory!
 1. Command Line 
 
     ~~~~
-    cd ~/code/stevebargelt.com/_portfolio
+    cd ~/code/stevebargelt.github.io
     bundle exec jekyll serve 
     ~~~~
 
@@ -94,8 +94,7 @@ I think the values are self-explainatory!
     git push origin master 
     ~~~~
 
-1. Changes will be pushed to http://test.stevebargelt.com automatically
-1. Goto https://bargelt.visualstudio.com to push live
+1. Changes will be pushed to http://bargelt.com automatically
 
 ## Notes:
 
@@ -103,6 +102,7 @@ Cool Jekyll responsive sites:
 https://phlow.github.io/feeling-responsive/
 
 https://github.com/johnotander/pixyll
+
 http://pixyll.com
 
 
