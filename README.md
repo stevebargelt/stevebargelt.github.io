@@ -4,6 +4,11 @@
 From a command line, simply: 
     ~~~~
     new_post "this is a new post title"
+
+    new_draft_post "this is a new post title"
+
+    publish_draft_post this-is-a-new-post.md
+
     ~~~~
 Gist: https://github.com/stevebargelt/scripts/blob/master/new_post.sh 
 

@@ -3,4 +3,4 @@ build:
 clean:
 	bundle exec jekyll clean
 serve:
-	bundle exec jekyll serve
+	bundle exec jekyll serve --watch --drafts
