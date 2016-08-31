@@ -3,14 +3,13 @@
 ## Add a Blog post
 From a command line, simply: 
 
-    ~~~~
-    new_post "this is a new post title"
+~~~~
+    
+new_post "this is a new post title"
+new_draft "this is a new post title"
+publish_draft this-is-a-new-post.md
 
-    new_draft "this is a new post title"
-
-    publish_draft this-is-a-new-post.md
-
-    ~~~~
+~~~~
 [Source for scripts](https://github.com/stevebargelt/scripts/) 
 
 The long way: 
