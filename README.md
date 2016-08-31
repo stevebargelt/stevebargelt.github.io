@@ -2,20 +2,23 @@
 
 ## Add a Blog post
 From a command line, simply: 
+
     ~~~~
     new_post "this is a new post title"
 
-    new_draft_post "this is a new post title"
+    new_draft "this is a new post title"
 
-    publish_draft_post this-is-a-new-post.md
+    publish_draft this-is-a-new-post.md
 
     ~~~~
-Gist: https://github.com/stevebargelt/scripts/blob/master/new_post.sh 
+[Source for scripts](https://github.com/stevebargelt/scripts/) 
 
 The long way: 
 
-1. Add a file in ~/code/stevebargelt.com/_posts
-2. Naming - date+title.md -- 2016-10-22-my-birthday.md
+1. Add a file in ~/code/stevebargelt.com/_posts or /_drafts
+2. Naming - 
+    * Post: date+title.md -- 2016-10-22-my-birthday.md
+    * Draft: title.md -- this-is-a-draft-post.md
 3. Add front matter:
 
     ~~~~
@@ -24,6 +27,7 @@ The long way:
     title: My Health data
     subtitle: This is a subtitle
     portfolio: 
+    image: 
     thumbimage:
     author: Steve Bargelt
     category: health
@@ -95,14 +99,6 @@ I think the values are self-explainatory!
 1. Goto https://bargelt.visualstudio.com to push live
 
 ## Notes:
-
-App insights JavaScript code to add to specific events and the like!
-~~~~
-appInsights.trackEvent("WinGame", {Game: "GameName", Difficulty: "Hard"}, {GameScore: 20, Opponents: 1});
-appInsights.trackMetric("GameScore", 20,  {Game: "GameName", Difficulty: "Hard"});
-~~~~
-
-https://azure.microsoft.com/en-us/documentation/articles/app-insights-javascript/
 
 Cool Jekyll responsive sites:
 https://phlow.github.io/feeling-responsive/
