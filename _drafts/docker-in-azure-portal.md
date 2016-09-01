@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Docker in Azure'
+title: 'Docker in Azure - Using the Azure Portal'
 subtitle: 
 portfolio:  
 thumbimage: ''
@@ -113,13 +113,16 @@ Once you have the TLS Keys go back the Azure portal:
 
 [![alt text](/assets/dockerAzure003_small.png)](/assets/dockerAzure003.png)
 
+>Note that as of the writing of this post virtual machine extensions can't be exported as scripts from the Azure portal. All the more reason to lean to setup your envirnment(s) manually. 
+
 Verify that you can use TLS to send commands to your docker host in Azure:
 
 ~~~~
+
 cd ~/tlsBlog
 docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=dockerblog.westus.cloudapp.azure.com:2376 version
+
 ~~~~
-[Screencast](https://asciinema.org/a/0cn8wai9hl6985wsogjcqaj4l)
 
 Now we move the cliet certs into the ~/.Docker folder so they are accessible and verify that we can still run Docker commands against our remote host.
 
@@ -129,10 +132,9 @@ mkdir -pv ~/.docker
 cd ~/tlsBlog
 cp -v {ca,cert,key}.pem ~/.docker
 docker --tls -H tcp://dockerblog.westus.cloudapp.azure.com:2376 info
-docker --tls -H tcp://dockerblog.westus.cloudapp.azure.com:2376 images
 
 ~~~~
-[Screencast](https://asciinema.org/a/8rtstnslril0ak3yy9qntkcrd)
+<script type="text/javascript" src="https://asciinema.org/a/a8bkxljueb8wspvze8hpdyvg4.js" id="asciicast-a8bkxljueb8wspvze8hpdyvg4" async></script>
 
 >Warning: Anyone with the keys can give any instructions to your Docker daemon, giving them root access to the machine hosting the daemon. Guard these keys as you would a root password!
 
@@ -142,11 +144,19 @@ In the next installmets of this series we will explore running jenkins in this D
 
 ~~~~
 
-docker --tls -H tcp://dockerblog.westus.cloudapp.azure.com:2376 run -d -p 8080:8080 jenkins
+docker --tls -H tcp://dockerblog.westus.cloudapp.azure.com:2376 run -d -p 8080:8080 --name myJenkins jenkins
  
 ~~~~ 
 <script type="text/javascript" src="https://asciinema.org/a/9ftd0o9ksu6n212vbn28c87jb.js" id="asciicast-9ftd0o9ksu6n212vbn28c87jb" async></script>
 
 [![alt text](/assets/dockerAzure004_small.png)](/assets/dockerAzure004.png)
 
-Of course this is just a fun Jenkins container to play with. We will be rolling our own Jenkins images over the next few blog posts in order to setup our system correctly. Once you are done playing with Jenkins in Docker in Azure you can clean up using `docker stop` `docker rm` and `docker rmi`
+Of course this is just a fun Jenkins container to play with. We will be rolling our own Jenkins images over the next few blog posts in order to setup our system correctly. Once you are done playing with Jenkins in Docker in Azure you can clean up:
+
+~~~~
+
+docker --tls -H tcp://dockerblog.westus.cloudapp.azure.com:2376 stop myjenkins
+docker --tls -H tcp://dockerblog.westus.cloudapp.azure.com:2376 rm myjenkins
+
+~~~~ 
+
