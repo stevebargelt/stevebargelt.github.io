@@ -29,7 +29,7 @@ Using Riot Games' process as inspiration here are my goals for this series:
 
 Posts I have planned:
 
-1. Running Docker in Azure - Portal
+1. [Running Docker in Azure - Portal]()
 1. Running Docker in Azure - Azure CLI
 1. Custom Jenkins Master Docker image for Azure
 1. Custom Jenkins Slave Docker image(s) for Azure  
