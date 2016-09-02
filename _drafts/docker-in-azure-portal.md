@@ -16,7 +16,7 @@ In the Azure portal spin up a machine running Ubuntu 16.04 LTS or Ubuntu 14.04 L
 
 [![alt text](/assets/dockerAzure001_small.png)](/assets/dockerAzure001.png)
 
-You will need to use or create a public/private keypair to be able to connect to your new VM via SSH:
+You will need to use or create a public/private keypair to be able to connect to your new VM via SSH. Depending on your philosophy regarding SSH keys you can use keys you already have or create new keys. Here's how you create new keys:
 
 ~~~~
 
