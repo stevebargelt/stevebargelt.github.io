@@ -14,8 +14,6 @@ tags: [containers, azure, Docker]
 
 In the Azure portal spin up a machine running Ubuntu 16.04 LTS or Ubuntu 14.04 LTS. For the purpose of this demo, I chose Ubuntu 16.04 LTS on a DS1_V2 sized machine and left the remaing defaults (I disabled monitoring just for this demo). 
 
-[![alt text](/assets/dockerAzure001_small.png)](/assets/dockerAzure001.png)
-
 You will need to use or create a public/private keypair to be able to connect to your new VM via SSH. Depending on your philosophy regarding SSH keys you can use keys you already have or create new keys. Here's how you create new keys:
 
 ~~~~
@@ -26,6 +24,23 @@ ssh-add ~/.ssh/docker_blog_id_rsa
 
 ~~~~
 <script type="text/javascript" src="https://asciinema.org/a/bzynaawxgryfbqotfvzn8tefu.js" id="asciicast-bzynaawxgryfbqotfvzn8tefu" async></script>
+
+Test your SSH connection to the VM and grab the local IP while you are at it: 
+
+~~~~
+
+ssh stevebargelt@dockerblog.westus.cloudapp.azure.com -p 22
+ifconfig eth0
+
+~~~~
+<script type="text/javascript" src="https://asciinema.org/a/4r0ifabsd0pwi2dqe44w2br29.js" id="asciicast-4r0ifabsd0pwi2dqe44w2br29" async></script>
+
+Also grab your IP address and/or DNS name from the Azure portal. Here are my public and private IP addresses and DNS name for this tutorial:
+
+* Public IP: 40.78.67.32 
+* Private IP: 10.0.0.4
+* DNS: dockerblog.westus.cloudapp.azure.com
+
 
 * Create a new Resource Group (I named mine dockerBlog)
 * Remember the username you entered
@@ -43,20 +58,6 @@ In the Netowrk Security Group created by Azure (it will be named something like 
 
 [![alt text](/assets/dockerAzure002_small.png)](/assets/dockerAzure002.png)
 
-Test your SSH connection to the VM and grab the local IP while you are at it: 
-
-~~~~
-
-ssh stevebargelt@dockerblog.westus.cloudapp.azure.com -p 22
-ifconfig eth0
-
-~~~~
-<script type="text/javascript" src="https://asciinema.org/a/4r0ifabsd0pwi2dqe44w2br29.js" id="asciicast-4r0ifabsd0pwi2dqe44w2br29" async></script>
-
-Also grab your IP address and/or DNS name from the Azure portal.
-* Public IP: 40.78.67.32 
-* DNS: dockerblog.westus.cloudapp.azure.com
-* Private IP: 10.0.0.4
 
 ### Generate the TLS certificates
 
