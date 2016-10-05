@@ -8,7 +8,15 @@ image: '/assets/azure_docker_jenkins.png'
 author: Steve Bargelt
 category: devops
 tags: [jenkins, cd, ci, docker, azure, riot games]
+excerpt_separator: <!--more-->
 ---
+### Introduction
+In this series we will create an entire Automated Build System (ABS) step-by-step, from scratch, using Docker, Jenkins, Azure, and Go. 
+
+Jenkins will be our CI/CD pipeline manager and it will spin up ephemeral slave nodes when needed. What I mean by that is Jenkins will spin up Docker containers as build environments that only get started when a build job needs them, so if you need a Java build environment or a DotNetcore environment, Jenkins will start a Docker container to handle your build and then destroy that node/container when the build is complete.
+
+We will also create a tool that I'm calling Dockhand that will allow developers (or dev teams) to submit their own build environments, as Docker images, into the system and create build jobs in Jenkins to use those images. This software engineers are responsible for their build environments not a (bottleneck) build engineering team. Very slick.
+<!--more--> 
 
 ### Background and Credit Where Credit is Due
 Riot Games Engineering has been an inspiration to me for the past several years. My son is an avid League of Legends player and I've dabbled myself. I've spent many hours reading their tech blog and watching their engineers speak at conferences. I often use Riot as an example in my day job - saying things like, "well if Riot Games can do it, we certainly can!" In [January of 2014](http://www.riotgames.com/articles/20140711/1322/league-players-reach-new-heights-2014), there were over 67 million players per month; 27 million people played at least once per day and there were 7.5 million concurrent players during peak hours. Insane traffic! Yet they find a way to innovate and migrate their tech rapidly. In addition, they are consistently recognized as one of the [Best Places to Work](http://www.riotgames.com/articles/20150309/1656/riot-lands-13-fortune’s-100-best-companies-work-list).
@@ -16,6 +24,8 @@ Riot Games Engineering has been an inspiration to me for the past several years.
 I've been interested in containers since early 2015, but I have not had time to really dig in and understand Docker until recently. I watched [Docker Deep Dive](https://www.pluralsight.com/courses/docker-deep-dive) from Pluralsight, which really helped with my foundational knowledge. When I was searching for next steps, I found a link from DockerCon 2016 to this [excellent video](https://engineering.riotgames.com/news/thinking-inside-container-dockercon-talk-and-story-so-far) from Maxfield Stewart of Riot Games on how his team has automated their build process using Jenkins and Docker containers. I love that they have pushed the responsibility for creating the container images to the dev teams.
 
 I followed along with [Max's seven part how-to series](https://engineering.riotgames.com/news/thinking-inside-container) - including the tutorial - and was blown away. I was inspired! I wanted to take this system to production, in Azure. So this tutorial series was born.
+
+I highly recommend following Max's posts before working through my tutorials. I'm going to build upon a lot of what I learned from those posts to get us set up in Azure.
 
 So a huge thanks to Riot Game and Maxfield Stewart. Also, thank you for your interest in my Automated Build System tutorials. 
 
@@ -59,7 +69,6 @@ All of this happens:
 A complete CI/CD build pipeline/environment/process is created, no intervention by a build team or any other infrastructure team. Software development teams are responsible for everything (except, of course, maintaining the infrastructure that these process run on). Pretty cool, yeah?
 
 ### What will we create?
-
 We will create this entire automated build system step-by-step, from scratch, using Docker, Jenkins, Azure, and Go (lang) We'll even use some dotnet (core!) as our sample application under development just to mix things up. 
 
 * Setup Docker in Azure (and connect securely from a remote machine)
