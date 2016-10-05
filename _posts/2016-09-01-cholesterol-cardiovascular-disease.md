@@ -9,7 +9,7 @@ author: Steve Bargelt
 category: Health
 tags: [health, cholesterol, diet, medicine, keto]
 ---
-## Cholesterol's relationship to cardiovascular disease (or lack thereof)
+### Cholesterol's relationship to cardiovascular disease (or lack thereof)
 A few months ago I watched a presentation by Zoë Harcombe and in it she referenced her data analysis of World Health Organization data on cholesterol and cardiovascular disease. She mentioned that the relationship between cholesterol numbers and cardiovascular related deaths is the opposite of what you'd expect. I found her original post on the subject: [Zoë Harcombe's cholesterol and heart disease relationship.](http://www.zoeharcombe.com/2010/11/cholesterol-heart-disease-there-is-a-relationship-but-its-not-what-you-think/) 
 
 Here is a snipet of her results: 
