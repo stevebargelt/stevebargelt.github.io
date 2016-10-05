@@ -4,7 +4,6 @@ title: My Blog
 subtitle: My ramblings and observations. 
 ---
 {% assign posts_count = (paginator.posts | size) %}
-
 <div class="blog">
     {% for post in paginator.posts %}
             <div class="row">
@@ -27,7 +26,9 @@ subtitle: My ramblings and observations.
                                     {% endif %}
                                 </a>
                             {% endif %}
-                            <p>{{ post.description }}</p>
+                            <div class="post-excerpt">
+                                {{ post.excerpt }}
+                            </div>
                             <a href="{{ post.url }}" class="btn btn-primary">Read More</a>
                         </div>
                     <div class="clearfix"></div>

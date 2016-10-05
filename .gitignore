@@ -3,6 +3,8 @@
 .AppleDouble
 .LSOverride
 
+.vscode/
+
 _site
 .sass-cache
 .jekyll-metadata
