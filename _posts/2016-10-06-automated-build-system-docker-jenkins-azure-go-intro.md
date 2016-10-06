@@ -31,11 +31,10 @@ So a huge thanks to Riot Game and Maxfield Stewart. Also, thank you for your int
 
 I want to quickly lay out the goals, outcomes  and expectations for these tutorials. I hate wasting time so I'll keep this is As brief as possible while still trying to give you an overview of what we are trying to accomplish here. Here is the video introduction:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2E89a7Twxh8" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/L-ncELRLDYg" frameborder="0" allowfullscreen></iframe>
 <br/>
 
 ### Outcomes
-
 The outcomes or user stories. I approached this from two roles... 
 
 >As a build engineer I don't want to process tickets to create build environments, build jobs, or CI/CD pipelines for software teams so that I have time to concentrate on keeping our build infrastructure healthy and have time to research and implement forward-thinking solutions for software teams to utilize. 
@@ -96,6 +95,6 @@ Please do understand that I am not an expert in any technology or concept in thi
 ### Resources 
 [Slides at SlideShare.com](http://www.slideshare.net/SteveBargelt/automated-build-system-with-docker-jenkins-and-azure-intro)
 
-[Link to the Video](https://youtu.be/2E89a7Twxh8)
+[Link to the Video](https://youtu.be/L-ncELRLDYg)
 
 
