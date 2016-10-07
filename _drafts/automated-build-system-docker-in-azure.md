@@ -13,25 +13,40 @@ tags: [jenkins, cd, ci, docker, azure, riot games]
 ### Introduction
 Welcome to part one of my Automated Build System (ABS) series. Where we are building a fully functional, hands-off build system using Docker and Jenkins... all in Azure. 
 
-If you would like an overview and some background please see my introduction video or blog post.
+* [Part 0: Introduction]({% post_url 2016-10-06-automated-build-system-docker-jenkins-azure-go-intro %})
+* Part 1: Docker in a VM in Azure
+* Part 2: Jenkins and Ephemeral Slave Nodes in Docker in Azure
+* Part 3: Secure Private Docker Registry in Azure and Securing Jenkins
+* Part 4: Scripting Jenkins and the Jenkins API
+* Part 5: Creating Dockhand with Go (the self-service build environment tool)
+* Part 6: Using the system. A simple DotNetCore app   
 
 In this first installment we will be setting up Docker in Azure on a Linux VM. Of course, there are several ways to accomplish this and I'm only going to walk through one possible solution in this tutorial. After we get this system up and running smoothly, I will explore other options for setting up the base system such as using the Azure command line interface (CLI).
 
 I know Microsoft recently announced that Windows Server 2016 will include Docker, and that is awesome! I'm very excited about Docker being truly cross-platform. After we get this build system running smoothly in Linux I will explore expanding the system to include Windows. 
 
-### Adding an Ubuntu VM to Azure
-Head over to the [Azure portal](http://portal.azure.com). We can click the New button and  if we search for Docker several options appear; Docker on Ubuntu seems like the obvious choice since that is ultimately what we are trying to setup. Unfortunately it's not that simple, one problem is that only allows you to select the classic deployment model and also doesn't set up Docker for TLS and secure communication. Sure we can live with the classic model and we can configure secure Docker ourselves, but there is a better option. Let's go back and search for Ubuntu and choose the latest LTS release currently 16.04. 
+Here is a diagram of what we will have at the end of this tutorial:
 
+[![build system diagram](/assets/buildSystem_01_small.png)](/assets/buildSystem_01.png)
+
+It may not look like much but it's the foundation for the system we are going to build. 
+
+The video tutorial:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/P7dGzLa4BHY" frameborder="0" allowfullscreen></iframe>
+<br/>
+
+### Adding an Ubuntu VM to Azure
+Head over to the [Azure portal](http://portal.azure.com). Click the New button in the left tray, search for Docker and several options appear; Docker on Ubuntu seems like the obvious choice since that is ultimately what we are trying to setup. Unfortunately it's not that simple, one problem is that only allows you to select the classic deployment model and also doesn't set up Docker for TLS and secure communication. Sure we can live with the classic model and we can configure secure Docker ourselves, but there is a better option. 
+
+Go back and search for Ubuntu and click the latest LTS release, currently 16.04. 
 
 Make sure the Deployment model is Resource Manager and click Create.
-
-<<screenshot>>
 
 I am going to name this VM *dockerBuild*
 
 One thing to note here is that you can save some money if you choose HDD - magnetic disks instead of solid state drives. Choosing HDD here opens up possibility so of cheaper plans which we will see in the next step. 
 
-Our admin user will be dockerUser and we are going to use SSH public/private keys to communicate and not username/password.
+Our admin user will be dockerUser and we are going to use SSH public/private keys to authenticate and not username/password.
 
 ### Creating SSH keys
 Open a terminal to create the public/private key pair. The C flag is just a comment - it's appended onto the end of the public key and it will serve as a reminder of what this keypair is for. We're not going to add a passphrase and we are going to name the files so that we have a clue as to what they are for ~/.ssh/id_dockerbuild_rsa.
@@ -414,7 +429,12 @@ docker images
 
 There all cleaned up, nice and tidy. 
 
-## Conclusion and Next Steps
+### Conclusion and Next Steps
 We now have docker running securely in a VM in Azure. Pretty cool and pretty simple but this is teh foundation of our Automated Build system so it was important to get it setup correctly. 
 
 In the next installment we really get to the meat of our automated build system, using our own custom images for our Jenkins master, setting up ephemeral Jenkins slave nodes - what I mean by that is Jenkins will spin up docker containers as build environments that only get started when a build job needs them, so if you need a Java build environment or a dotnet core environment, Jenkins will start start a Docker container to handle your build! Exciting stuff! See you soon...
+
+### Resources
+
+
+Video: https://youtu.be/P7dGzLa4BHY

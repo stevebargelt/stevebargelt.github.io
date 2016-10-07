@@ -4,6 +4,7 @@
 .LSOverride
 
 .vscode/
+pre-assets/
 
 _site
 .sass-cache
