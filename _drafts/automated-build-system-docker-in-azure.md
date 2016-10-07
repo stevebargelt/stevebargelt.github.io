@@ -27,7 +27,7 @@ I know Microsoft recently announced that Windows Server 2016 will include Docker
 
 Here is a diagram of what we will have at the end of this tutorial:
 
-[![build system diagram](/assets/buildSystem_01_small.png)](/assets/buildSystem_01.png)
+[![build system diagram](/assets/buildSystem_01_small.png){: .img-responsive }](/assets/buildSystem_01.png)
 
 It may not look like much but it's the foundation for the system we are going to build. 
 
@@ -46,7 +46,7 @@ I am going to name this VM *dockerBuild*
 
 One thing to note here is that you can save some money if you choose HDD - magnetic disks instead of solid state drives. Choosing HDD here opens up possibility so of cheaper plans which we will see in the next step. 
 
-Our admin user will be dockerUser and we are going to use SSH public/private keys to authenticate and not username/password.
+Our admin user will be dockerUser and we are going to use SSH keys to authenticate and not username/password.
 
 ### Creating SSH keys
 Open a terminal to create the public/private key pair. The C flag is just a comment - it's appended onto the end of the public key and it will serve as a reminder of what this keypair is for. We're not going to add a passphrase and we are going to name the files so that we have a clue as to what they are for ~/.ssh/id_dockerbuild_rsa.
@@ -86,65 +86,74 @@ Back in our browser, paste in the key. you can see our -C comment is here in the
 
 We are going to create a new resource group and name it dockerBuild, I'm in Seattle so I'm chosing westus as the location. 
 
+[![azure vm basic settings](/assets/azure-vm-basics_small.png){: .img-responsive }](/assets/azure-vm-basics.png)
+
 Click OK
 
-Alright here we need to choose a size or plan for our VM. You will notice that we can't see the "A" plans that can be as cheap as $15 per month this is because I decided to leave the SSD selected. In preparing for this tutorial - I found that using the cheaper plans with the magnetic spinning disks made the Docker host run unbearably slow. So I'll pick the DS1_V2 Standard. Click Select
+### Pick Your Plan
+Alright next we need to choose a plan for our VM. You will notice that even if you click View All we can't see the "A" plans that can be as cheap as $15 per month because I decided to leave the SSD selected. In preparing for this tutorial - I found that using the cheaper plans with the magnetic spinning disks made the Docker host run unbearably slow. So I'll pick the DS1_V2 Standard. 
 
-I am leaving all of the default names here for the storage account and all of the networking components. Over the past couple years of working with resources in the cloud, I've found that I don't care about machine / resource names. I used to plan out resource names, even going with themes like Lord of the Rings or Star Wars. Well now all of the resources are disposable and easily destroyed and rebuilt  so names just don't matter to me any more. I'm not going to setup a high availability set either. So I am going with all of the defaults. Click okay. 
+[![azure vm plan picking DS1_V2](/assets/azure-pick-plan-small.png){: .img-responsive }](/assets/azure-pick-plan.png)
+
+Click Select
+
+### More VM Settings
+I am leaving all of the default names here for the storage account and all of the networking components. Over the past couple years of working with resources in the cloud, I've found that I don't care about machine / resource names. I used to plan out resource names, even going with themes like Lord of the Rings or Star Wars. Well now all of the resources are disposable and easily destroyed and rebuilt so names just don't matter to me any more. I'm not going to setup a high availability set either. So I am going with all of the defaults. Click okay. 
+
+[![azure vm settings](/assets/azure-vm-settings_small.png){: .img-responsive }](/assets/azure-vm-settings.png)
 
 Azure validates the build, give us a quick summary. Click okay one more time and Azure starts provisioning the VM for us.
 
-
 ### VM Preparation
-That took a few minutes to complete we wiull go back to the Azure portal. I'll click on Resource groups and there is our new group dockerBuild, I'll click on the dots and "Pin to Dashboard" this is just a personal preference, I like to access to the resource group from the dashboard. 
+Once Azure has completed it's work, back to the Azure portal. Click on Resource Groups.
 
-Click on dockerBuild (Resource Group) 
+Click on dockerBuild (Resource Group), this gives us a view of our newly provisioned VM and supporting cast including all of the networking and storage components. 
 
-Here is our newly provisioned VM and supporting cast
+Click on dockerBuild (the VM). Then click on the IP address.
 
-Let's click on the dockerBuild (the VM). Then click on the IP address.
+Add a DNS name to our IP settings... Click Configuration - I will use dockerbuildsys
 
-I want to remember public IP address and DNS name for our VM... so I'll open a Visual Studio Code doc over here to take a few notes. 
-
-Click Configuration - name this dockerbuildsys 
+We want to take note of the public IP address and DNS name for our VM... so I'll open a text editor, Visual Studio Code is my current favorite, to take a few notes.  
 
 Click Save
 
-Copy the DNS and IP, paste them in a text editor, lets add a DNS name to the VM... 
+Copy the DNS and IP, paste them in a text editor. 
 
-~~~~
+I will also point a custom DNS name at this VM. Later in this series we're going to get TLS certificates from [letsencrypt](https://letsencrypt.org) for secure https communication to our private Docker registry. We will must have a custom domain name to make that happen. The quick reason is that Azure domains are secured by wildcard certs which won't work for our purposes. _If you don't have a domain name I strongly suggest that you obtain one so that we can establish secure communication with our private Docker Registry (and Jenkins)._ 
 
-40.78.31.164
-dockerbuildsys.westus.cloudapp.azure.com
+All name providers are different and you can google for how to add an a-record at yours. At my provider in the Host Records interface I will just paste the public IP address into the A-record for the domain name I want to use _dockerbuild.harebrained-apps.com_. 
 
-~~~~
+[![host a-record](/assets/host-a-record-small.png){: .img-responsive }](/assets/host-a-record.png)
 
-I also want to point a custom DNS name at this VM. Later in this series we're going to get TLS certs from letsencrypt for secure https communication to our private Docker registry. We will must have a custom domain name to make that happen. The quick reason is that Azure domains are secured by wildcard certs which won't work for our purposes. So... if you don't have a domain name go spend the $10 to get one! 
+Here are my notes so far:
 
-At my name provider, in the Host Records interface I will just paste the public IP address into the A-record for the domain name I want to use - dockerbuild.harebrained-apps.com. 
+* 40.78.31.164
+* dockerbuild.harebrained-apps.com
+* dockerbuildsys.westus.cloudapp.azure.com
 
-We'll paste this into out notes as well.
+We will be adding our local IP address to this list shortly. 
 
 ### SSH to our VM
+Azure already opened up port 22 for SSH communication, very thoughtful of Microsoft. 
 
-Azure already opened up port 22 for SSH communication so lets connect via SSH - we'll use our custom domain name.
+Connect via SSH - we'll use our custom domain name.
 
 ~~~~
 
 $ ssh dockeruser@dockerbuild.harebrained-apps.com
+
 Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-38-generic x86_64)
-
 ...
-
 To run a command as administrator (user "root"), use "sudo <command>".
 
 dockeruser@dockerBuild:~$ 
 
 ~~~~
 
-Connected! While we are in here we're going to grab the local/private IP address:
+Connected! While we are in here we're going to grab the local/private IP address using the ifconfig command:
 
 ~~~~
+
 $ ifconfig 
 
 eth0      Link encap:Ethernet  HWaddr 00:0d:3a:30:21:a5  
@@ -156,11 +165,9 @@ eth0      Link encap:Ethernet  HWaddr 00:0d:3a:30:21:a5
           collisions:0 txqueuelen:1000 
           RX bytes:2252753926 (2.2 GB)  TX bytes:238825364 (238.8 MB)
 
-$
-
 ~~~~
 
-We want the inet addr for the eth0 adapter. We'll also copy that into our notes for use later.
+We want the inet addr for the eth0 adapter. We'll also copy that into our notes for use later. We can exit / logout of the SSH session.
 
 ~~~~
 
@@ -172,22 +179,27 @@ $
 
 ~~~~ 
 
-Then exit out of our ssh session. Back into the Azure portal -- we need to open a few more ports for our system to work.
+Back into the Azure portal -- we need to open a few more ports for our system to work.
 
-We are still in the Network Security Group, Inbound Security Rules, click add. The first rule we are going to add is for web/http access for our Jenkins server. HTTP is a preconfigured service you can pick from the Services drop-down. Lets name this allow-http, click ok.
+Click on dockerBuild (Resource Group) > Network Security Group, Inbound Security Rules, click add. 
 
-Next we're going to add secure web / https communication - again select from the Service drop down. We'll call this alow-https, click ok. 
+The first rule we are going to add is for web/http access for our Jenkins server. HTTP is a preconfigured service you can pick from the Services drop-down. Lets name this **allow-http**, click ok.
 
+Next we're going to add secure web / https communication. Select HTTPS from the Service drop down. We'll call this **allow-https**, click ok. 
 
-Last one we are going to add for now, we are going open a port for secure Docker TLS communication. We'll call this allow-docker-tls and since this is not a preconfigured service so we have to make a couple more choices: 
+Last one we are going to add for now, we are going open a port for secure Docker TLS communication. We'll call this **allow-docker-tls** and since this is not a preconfigured service so we have to make a couple more choices: 
 
 * TCP as the protocol
 * Port 2376 
 
 Click OK
 
+Our inbound security rules should now look about like this:
+
+[![azure inbound rules image](/assets/azure-inbound-rules-small.png){: .img-responsive }](/assets/azure-inbound-rules.png)
+
 ### TLS CA and Certs
-We have one more thing to do before we install Docker in our VM. Docker uses TLS with client certificates for authentication to communicate with remote hosts. Our Docker host daemon will only accept connections from clients authenticated by a certificate signed by that CA. So we will create our own certificate authority, server and client certs and keys. 
+We have one more thing to do before we install Docker in our VM. Docker uses [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security) with client certificates for authentication to communicate with remote hosts. Our Docker host daemon will only accept connections from clients authenticated by a certificate signed by that CA. So we will create our own certificate authority, server and client certs and keys. Interesting aside regarding self-signed client certs: [https://schnouki.net/posts/2015/11/25/lets-encrypt-and-client-certificates/](Trusted CA for Client Certs?)
 
 For the sake of organization we are going to create a local folder to hold our CA and certs.
 
@@ -247,7 +259,7 @@ openssl req -subj "/CN=dockerbuild.harebrained-apps.com" -sha256 -new -key serve
 
 ~~~~
 
-Since the TLS connection can be made via IP address (between machines on the private network in Azure and to the public IP address from external machines) in addition to two DNS names, we need to specify all of the DNS and IP options. This is done in a certificate extensions file. We will just echo the options out to that file... 
+Since the TLS connection can be made via IP address (between machines on the private network in Azure, localhost:127.0.0.1, and to the public IP address from external machines) in addition to two DNS names, we need to specify all of the DNS and IP options. This is done in a certificate extensions file. We will just echo the options out to that file... 
 
 ~~~~
 
@@ -310,7 +322,6 @@ chmod -v 0444 ca.pem server-cert.pem cert.pem
 I guess this is as good of a time as any to bring this up... anyone with these keys can give any instructions to your Docker daemon, including giving them root access to the machine hosting the daemon. Guard these keys as you would a root password!
 
 ### Installing Docker in your VM
-
 Back to the Azure portal...  
 
 Click on dockerBuild (resource group) > dockerBuild (VM) 
@@ -320,12 +331,17 @@ You can see we've already done the prep work necessary here, we opened port 2376
 
 Select the certificate authority, the server cert, the server key. Then click OK... Azure will go off and install Docker in our VM.
 
-Once the provisioning has succeeded. We will connect to the Docker host we've just created. Flip over to our terminal... note that we are in the ~/tlsBuild folder which will save us some typing. We are going to use the --tlsVerify flag with Docker, and also tell it what CA to use and what client certificate and key to use and what host to connect to (including port). Once we do all of that we can run any Docker command on the remote host, let's simply get the version info
+[![azure docker settings image](/assets/azure-docker-settings-small.png){: .img-responsive }](/assets/azure-docker-settings.png)
+
+### Connecting to a remote Docker host 
+Once the provisioning has succeeded. We will connect to the Docker host we've just created. 
+
+Flip over to our terminal... note that we are in the ~/tlsBuild folder which will save us some typing. We are going to use the --tlsVerify flag with Docker, and also tell it what CA to use and what client certificate and key to use and what host to connect to (including port). Once we do all of that we can run any Docker command on the remote host, let's simply get the version info
 
 ~~~~
 
-cd ~/tlsBuild
-docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=dockerbuild.harebrained-apps.com:2376 version
+$ cd ~/tlsBuild
+$ docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=dockerbuild.harebrained-apps.com:2376 version
 
 Client:
  Version:      1.12.1
@@ -351,7 +367,7 @@ Lets try to run this without the TLS info.
 
 ~~~~
 
-docker -H=dockerbuild.harebrained-apps.com:2376 version
+$ docker -H=dockerbuild.harebrained-apps.com:2376 version
 
 Client:
  Version:      1.12.1
@@ -365,19 +381,17 @@ Get http://dockerbuild.harebrained-apps.com:2376/v1.24/version: malformed HTTP r
 
 ~~~~
 
-Yep there we go we get an error and can't connect - docker is even so helpful as to suggest that we are trying to connect to a TLS-enabled daemon without TLS. Awesome.
+We get an error and can't connect - docker is even so helpful as to suggest that we are trying to connect to a TLS-enabled daemon without TLS. Awesome.
 
-Now we really don't want to have to send in the four tls flags every time we want to connect to our remote host - so we will put our CA and client certs and keys in a location where the Docker client can find them.
+We really don't want to have to send in the four tls flags every time we want to connect to our remote host - so we will put our CA and client certs and keys in a location where the Docker client can find them.
 
 ~~~~
 
-mkdir -pv ~/.docker
-cd ~/tlsBuild
-cp -v {ca,cert,key}.pem ~/.docker
+$ mkdir -pv ~/.docker
+$ cd ~/tlsBuild
+$ cp -v {ca,cert,key}.pem ~/.docker
 
-docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 info
-
-docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 ps -a
+$ docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 ps -a
 
 ~~~~
 
@@ -385,15 +399,15 @@ As you'd expect there are no containers running / or stopped on our new install.
 
 ~~~~
 
-docker -H tcp://dockerbuild.harebrained-apps.com:2376 images
+$ docker -H tcp://dockerbuild.harebrained-apps.com:2376 images
 
 ~~~~
 
-And no images Let's fix that really quick. We went to all the trouble of setting up TLS so lets exit out ssh...
+And no images. Let's fix that really quick.
 
 ~~~~
 
-docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 run -d -p 80:8080 --name myJenkins jenkins
+$ docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 run -d -p 80:8080 --name myJenkins jenkins
 
 Unable to find image 'jenkins:latest' locally
 latest: Pulling from library/jenkins
@@ -401,40 +415,34 @@ latest: Pulling from library/jenkins
 
 ~~~~
 
-You can see that Docker is pulling the Jenkins image to the remote host, once that is complete, we can access Jenkins on our Azure server. 
+You can see that Docker is pulling the Jenkins image to the remote host, once that is complete, we can access Jenkins at our IP or domain name: http://dockerbuild.harebrained-apps.com
 
-http://dockerbuild.harebrained-apps.com
-
-Yep there we go Jenkins up and running in a Docker container in a VM in Azure. Since this isn't really the Jenkins image we want we won't start configuring it and we will clean up a bit.
+Jenkins up and running in a Docker container, in a VM, in Azure. Since this isn't really the Jenkins image we want we won't start configuring it and we will clean up a bit.
 
 ~~~~
 
-docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 rm -f myJenkins
+$ docker --tls -H tcp://dockerbuild.harebrained-apps.com:2376 rm -f myJenkins
 
 ~~~~
 
-And you know just to show we *can* do things locally we will SSH into our vm to clean up
+And you know just to show we *can* do things locally on the VM we will SSH in to clean up a bit more.
 
 ~~~~
 
-ssh dockeruser@dockerbuild.harebrained-apps.com
+$ ssh dockeruser@dockerbuild.harebrained-apps.com
 
-docker images
+$ docker rmi jenkins
 
-docker rmi <image ID>
-
-docker images
+$ docker images
 
 ~~~~
 
 There all cleaned up, nice and tidy. 
 
 ### Conclusion and Next Steps
-We now have docker running securely in a VM in Azure. Pretty cool and pretty simple but this is teh foundation of our Automated Build system so it was important to get it setup correctly. 
+We now have docker running securely in a VM in Azure. Pretty cool and pretty simple but this is the foundation of our Automated Build system so it was important to get it setup correctly. 
 
-In the next installment we really get to the meat of our automated build system, using our own custom images for our Jenkins master, setting up ephemeral Jenkins slave nodes - what I mean by that is Jenkins will spin up docker containers as build environments that only get started when a build job needs them, so if you need a Java build environment or a dotnet core environment, Jenkins will start start a Docker container to handle your build! Exciting stuff! See you soon...
+In the next installment we really get to the meat of our automated build system, using our own custom images for our Jenkins master, setting up [ephemeral](https://en.wiktionary.org/wiki/ephemeral) Jenkins slave nodes; Jenkins will spin up docker containers as build environments that only get started when a build job needs them, so if you need a Java build environment or a dotnet core environment, Jenkins will start start a Docker container to handle your build! Exciting stuff! See you soon...
 
 ### Resources
-
-
-Video: https://youtu.be/P7dGzLa4BHY
+Video Tutorial: [https://youtu.be/P7dGzLa4BHY](https://youtu.be/P7dGzLa4BHY)

@@ -5,6 +5,7 @@
 
 .vscode/
 pre-assets/
+assets/small/
 
 _site
 .sass-cache
