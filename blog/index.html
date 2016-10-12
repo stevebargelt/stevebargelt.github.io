@@ -13,9 +13,9 @@ subtitle: My ramblings and observations.
                             <h2>{{ post.title }}</h2>
                             </a>
                             <ul class="list-inline">
-                                <li>Post By: <a href="#">{{ post.author }}</a></li>
-                                <li>Date: <a href="#">{{ post.date | date:"%B %d, %Y" }}</a></li>
-                                <li>Category: <a href="#">{{ post.category }}</a></li>
+                                <li>Post By: {{ post.author }}</li>
+                                <li>Date: {{ post.date | date:"%B %d, %Y" }}</li>
+                                <li>Category: {{ post.category }}</li>
                             </ul>
                             {% if post.thumbimage %}
                                 <a href="{{ post.url }}">

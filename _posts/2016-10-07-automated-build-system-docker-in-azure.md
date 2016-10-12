@@ -199,7 +199,7 @@ Our inbound security rules should now look about like this:
 [![azure inbound rules image](/assets/azure-inbound-rules-small.png){: .img-responsive }](/assets/azure-inbound-rules.png)
 
 ### TLS CA and Certs
-We have one more thing to do before we install Docker in our VM. Docker uses [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security) with client certificates for authentication to communicate with remote hosts. Our Docker host daemon will only accept connections from clients authenticated by a certificate signed by that CA. So we will create our own certificate authority, server and client certs and keys. Interesting aside regarding self-signed client certs: [https://schnouki.net/posts/2015/11/25/lets-encrypt-and-client-certificates/](Trusted CA for Client Certs?)
+We have one more thing to do before we install Docker in our VM. Docker uses [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security) with client certificates for authentication to communicate with remote hosts. Our Docker host daemon will only accept connections from clients authenticated by a certificate signed by that CA. So we will create our own certificate authority, server and client certs and keys. Interesting aside regarding self-signed client certs: [Trusted CA for Client Certs?](https://schnouki.net/posts/2015/11/25/lets-encrypt-and-client-certificates/)
 
 For the sake of organization we are going to create a local folder to hold our CA and certs.
 

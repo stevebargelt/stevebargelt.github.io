@@ -19,7 +19,7 @@ I was fascinated, but being the data nerd that I am, I was pretty surprised that
 
 I headed over to the WHO site and searched. And Searched. AND searched. I finally found what I was looking for. The starting point for all of the WHO data is the [World Health Organization (WHO) Global Health Observatory (GHO)](http://www.who.int/gho/en/). From there I finally stumbled across [cholesterol data](http://apps.who.int/gho/data/node.main.A883?lang=en). 
 
-Finding information on deaths caused by cardiovascular disease wasn't quite as easy. The WHO/GHO splits CVD into [ischaemic events](https://rho.emro.who.int/rhodata/node.main.A1079?lang=en) (heart attacks) and [cerebrovascular events](https://rho.emro.who.int/rhodata/node.main.A1073?lang=en) (strokes), so in my analysis I combined the two. 
+Finding information on deaths caused by cardiovascular disease wasn't quite as easy. The WHO/GHO splits CVD into ischaemic events (heart attacks) and cerebrovascular events (strokes), so in my analysis I combined the two. 
 
 Here is a snipet of my results:
 ![cholesterol vs. cvd deaths chart](/assets/cholesterol002_small.png)
