@@ -16,6 +16,7 @@ collections:
         output:   true
 
 show_drafts: false
+future: false
 
 # Build settings
 markdown: kramdown
