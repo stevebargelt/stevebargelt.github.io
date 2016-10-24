@@ -29,6 +29,7 @@ Here is a diagram of what we will have at the end of this tutorial:
 
 [![build system diagram](/assets/buildSystem_01_small.png){: .img-responsive }](/assets/buildSystem_01.png){: .img-blog }
 
+
 It may not look like much but it's the foundation for the system we are going to build. 
 
 The video tutorial:

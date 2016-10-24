@@ -79,7 +79,7 @@ We will create this entire automated build system step-by-step, from scratch, us
 
 I tried to make these tutorials as real-world as possible. I was frustrated when seeking out how-tos and tutorials. They always seemed to be incomplete or missing key pieces that would actually allow the solution to work! I can't tell you how many times I saw or heard "here's how to setup <THIS new spiffy technology> BUT that whole security thing is _hard_ so we will leave that up to you to figure out." Well, thanks for nothing! Setting systems up correctly and securely is the HARD part and that's why I was seeking out advice and examples in the first damned place! 
 
-[![alt text](/assets/buildSysInto00_small.png)](/assets/buildSysInto00.png)
+[![alt text](/assets/buildSysInto00_small.png)](/assets/buildSysInto00.png){: .img-blog }
 
 ### What to expect
 
