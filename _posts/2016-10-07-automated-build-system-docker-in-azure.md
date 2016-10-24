@@ -27,7 +27,7 @@ I know Microsoft recently announced that Windows Server 2016 will include Docker
 
 Here is a diagram of what we will have at the end of this tutorial:
 
-[![build system diagram](/assets/buildSystem_01_small.png){: .img-responsive }](/assets/buildSystem_01.png)
+[![build system diagram](/assets/buildSystem_01_small.png){: .img-responsive }](/assets/buildSystem_01.png){: .img-blog }
 
 It may not look like much but it's the foundation for the system we are going to build. 
 
@@ -86,21 +86,21 @@ Back in our browser, paste in the key. you can see our -C comment is here in the
 
 We are going to create a new resource group and name it dockerBuild, I'm in Seattle so I'm chosing westus as the location. 
 
-[![azure vm basic settings](/assets/azure-vm-basics_small.png){: .img-responsive }](/assets/azure-vm-basics.png)
+[![azure vm basic settings](/assets/azure-vm-basics_small.png){: .img-responsive }](/assets/azure-vm-basics.png){: .img-blog }
 
 Click OK
 
 ### Pick Your Plan
 Alright next we need to choose a plan for our VM. You will notice that even if you click View All we can't see the "A" plans that can be as cheap as $15 per month because I decided to leave the SSD selected. In preparing for this tutorial - I found that using the cheaper plans with the magnetic spinning disks made the Docker host run unbearably slow. So I'll pick the DS1_V2 Standard. 
 
-[![azure vm plan picking DS1_V2](/assets/azure-pick-plan-small.png){: .img-responsive }](/assets/azure-pick-plan.png)
+[![azure vm plan picking DS1_V2](/assets/azure-pick-plan-small.png){: .img-responsive }](/assets/azure-pick-plan.png){: .img-blog }
 
 Click Select
 
 ### More VM Settings
 I am leaving all of the default names here for the storage account and all of the networking components. Over the past couple years of working with resources in the cloud, I've found that I don't care about machine / resource names. I used to plan out resource names, even going with themes like Lord of the Rings or Star Wars. Well now all of the resources are disposable and easily destroyed and rebuilt so names just don't matter to me any more. I'm not going to setup a high availability set either. So I am going with all of the defaults. Click okay. 
 
-[![azure vm settings](/assets/azure-vm-settings_small.png){: .img-responsive }](/assets/azure-vm-settings.png)
+[![azure vm settings](/assets/azure-vm-settings_small.png){: .img-responsive }](/assets/azure-vm-settings.png){: .img-blog }
 
 Azure validates the build, give us a quick summary. Click okay one more time and Azure starts provisioning the VM for us.
 
@@ -123,7 +123,7 @@ I will also point a custom DNS name at this VM. Later in this series we're going
 
 All name providers are different and you can google for how to add an a-record at yours. At my provider in the Host Records interface I will just paste the public IP address into the A-record for the domain name I want to use _dockerbuild.harebrained-apps.com_. 
 
-[![host a-record](/assets/host-a-record-small.png){: .img-responsive }](/assets/host-a-record.png)
+[![host a-record](/assets/host-a-record-small.png){: .img-responsive }](/assets/host-a-record.png){: .img-blog }
 
 Here are my notes so far:
 
@@ -196,7 +196,7 @@ Click OK
 
 Our inbound security rules should now look about like this:
 
-[![azure inbound rules image](/assets/azure-inbound-rules-small.png){: .img-responsive }](/assets/azure-inbound-rules.png)
+[![azure inbound rules image](/assets/azure-inbound-rules-small.png){: .img-responsive }](/assets/azure-inbound-rules.png){: .img-blog }
 
 ### TLS CA and Certs
 We have one more thing to do before we install Docker in our VM. Docker uses [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security) with client certificates for authentication to communicate with remote hosts. Our Docker host daemon will only accept connections from clients authenticated by a certificate signed by that CA. So we will create our own certificate authority, server and client certs and keys. Interesting aside regarding self-signed client certs: [Trusted CA for Client Certs?](https://schnouki.net/posts/2015/11/25/lets-encrypt-and-client-certificates/)
@@ -331,7 +331,7 @@ You can see we've already done the prep work necessary here, we opened port 2376
 
 Select the certificate authority, the server cert, the server key. Then click OK... Azure will go off and install Docker in our VM.
 
-[![azure docker settings image](/assets/azure-docker-settings-small.png){: .img-responsive }](/assets/azure-docker-settings.png)
+[![azure docker settings image](/assets/azure-docker-settings-small.png){: .img-responsive }](/assets/azure-docker-settings.png){: .img-blog }
 
 ### Connecting to a remote Docker host 
 Once the provisioning has succeeded. We will connect to the Docker host we've just created. 
