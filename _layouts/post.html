@@ -2,7 +2,7 @@
 layout: page
 ---
 <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-
+<div class="container-fluid">
   <header class="post-header">
     {% if page.image %}
       <img class="img-responsive img-post-header" src="{{page.image}}" alt="{{page.title}}-image">
@@ -18,7 +18,7 @@ layout: page
   <div class="post-content" itemprop="articleBody">
     {{ content }}
   </div>
-
+</div> <!-- container -->
 </article>
 
 

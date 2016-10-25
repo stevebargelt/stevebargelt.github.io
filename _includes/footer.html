@@ -1,38 +1,13 @@
 <!-- Footer -->
+<div class="container">
 <footer class="site-footer">
-  <div class="wrapper">
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li>{{ site.title }}</li>
-          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-2">
-        <ul class="social-media-list">
-          {% if site.github_username %}
-          <li>
-            {% include icon-github.html username=site.github_username %}
-          </li>
-          {% endif %}
-
-          {% if site.twitter_username %}
-          <li>
-            {% include icon-twitter.html username=site.twitter_username %}
-          </li>
-          {% endif %}
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-3">
-        <p class="footer-site-description">{{ site.description }}</p>
-      </div>
-    </div>
-
-  </div>
+  
+<a href="https://twitter.com/stevebargelt"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+<a href="https://github.com/stevebargelt"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+<a href="https://www.linkedin.com/in/stevebargelt"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">LinkedIn</span></a>
 
 </footer>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
@@ -41,9 +16,10 @@
 
 <script src="/js/jquery.colorbox-min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
 
-<script src="/js/grayscale.js"></script>
+<script src="/js/navscroll.js"></script>
+
 <script>
   jQuery('a.img-blog').colorbox({ opacity:0.5 });
 </script>
