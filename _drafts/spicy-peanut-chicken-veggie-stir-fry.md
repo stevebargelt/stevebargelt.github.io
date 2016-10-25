@@ -9,80 +9,24 @@ author: Steve Bargelt
 category: recipes
 tags: [keto, recipe, ketosis, LCHF]
 ---
-
-<link href="/css/recipe.css" rel="stylesheet">
-
-This one is for you, Derek. Last week my son sent me a text saying that he wanted me to share some tasty veggie recipes because he didn't feel like he was eating enough vegetables. Here is one of our current faves:
-
-<div class="row recipe">
-	<div class="col-sm-3">
-		<div class="RSRHS"> 
-			<div class="RSNutritionBox"> 
-				<div class="RSNutritionInner"> 
-					<div class="RSNutritionHead">
-						Nutrition Facts
-					</div> 
-					<ul class="yield"> 
-						<li>6 Servings</li> 
-					</ul> 
-					<div itemprop="nutrition"> 
-						<ul class="serves"> 
-							<li>Serving size 2 cups</li> 
-						</ul>
-						<ul class="calories">
-							<li><span class="calTitle">Calories</span><span class="calValue">373</span>
-							<div style="clear: both;"></div></li> 
-						</ul>
-						<ul>
-							<li><span class="nutrientTitle">Total Fat</span> 35g</li> 
-							<li><span class="nutrientTitle">Total Carbohydrate</span> 7g</li> 
-							<ul class="SubNutrient">
-								<li>Fiber 3g</li> 
-								<li>Sugars 4g</li>
-							</ul>
-							<li><span class="nutrientTitle">Protein</span> 10g</li>
-						</ul> 
-					</div> 
-				</div> 
-			</div> 
-			<div class="RSDetails"> 
-				<div class="RSTimes"> 
-					<div class="RSHead"> 
-						Prep time:&nbsp; 
-						<time itemprop="prepTime" datetime="PT5M">5 mins</time> 
-					</div> 
-					<div class="RSHead"> 
-						Cook time:&nbsp; <time itemprop="cookTime" datetime="PT15M">15 mins</time> 
-					</div> 
-					<div class="RSHead"> 
-						Total time:&nbsp; <time itemprop="totalTime" datetime="PT20M">20 mins</time> 
-					</div> 
-				</div> 
-			</div> 
-		</div>
-	</div>
-	<div class="col-sm-9" markdown="1">
+This oen is for you, Derek. Last week my son sent me a text saying that he wanted me to share some tasty veggie recipes because he didnt' feel like he was eating enougt vegetables. HEre si one of our current faves:
 
 Ingredients: 
 
-The main stuff:
-
-* 2.5 pounds Chicken
-* Big bag of frozen veggines. We like Asian or stir-fry blend.
+The main stuffs:
+2.5 pounds Chicken
+Big bag of frozen veggines. We like Asian or stir-fry blend.
 
 The spicy peanut sauce:
-
-* 1/2 cup of natural peanut butter 
-* Soy sauce
-* Coconut Milk (may substitute chicken or veggie stock)
-* Siracha (to taste)
-* Artificial Sweetner (optional)
+1/2 cup of natural peanut butter 
+soy sauce
+coconut milk
+Siracha
 
 Spices:
+Curry Powder
+Chili Powder
+Salt 
+Pepper
 
-* Chili Powder
-* Salt 
-* Pepper
 
-</div>
-</div>

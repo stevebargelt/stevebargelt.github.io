@@ -8,8 +8,7 @@ url: "http://stevebargelt.com" # the base hostname & protocol for your site
 twitter_username: stevebargelt
 github_username:  stevebargelt
 linkedin_url: stevebargelt
-sass:
-    sass_dir: _sass
+
 collections:
     portfolio:
     photo_gallery: 
