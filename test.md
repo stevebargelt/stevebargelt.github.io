@@ -1,21 +1,108 @@
 ---
 layout: plain
 ---
+
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-md-push-9">
+            NAV COLUMN
+        </div>
+        <div class="col-md-9 col-md-pull-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3">
+                        One of three columns
+                    </div>
+                    <div class="col-sm-3">
+                        One of three columns
+                    </div>
+                    <div class="col-sm-3">
+                        One of three columns
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="row">
-
-    <div class="col-sm-4">
-        This is part of our grid.
-    </div>
-    <div class="col-sm-4">
-        This is part of our grid.
-    </div>
-    <div class="col-sm-4">
-        This is part of our grid.
-    </div>
-
+  <div class="col-xs-12 col-sm-6 col-md-8">this is the recipe</div>
+  <div class="col-xs-6 col-md-4">NUTRITION FACTS</div>
 </div>
 
+<hr>
+
+<div class="row recipe">
+	<div class="col-sm-3 col-sm-push-9">
+		<div class="RSRHS"> 
+			<div class="RSNutritionBox"> 
+				<div class="RSNutritionInner"> 
+					<div class="RSNutritionHead">
+						Nutrition Facts
+					</div> 
+					<ul class="yield"> 
+						<li>6 Servings</li> 
+					</ul> 
+					<div itemprop="nutrition"> 
+						<ul class="serves"> 
+							<li>Serving size 2 cups</li> 
+						</ul>
+						<ul class="calories">
+							<li><span class="calTitle">Calories</span><span class="calValue">373</span>
+							<div style="clear: both;"></div></li> 
+						</ul>
+						<ul>
+							<li><span class="nutrientTitle">Total Fat</span> 35g</li> 
+							<li><span class="nutrientTitle">Total Carbohydrate</span> 7g</li> 
+							<ul class="SubNutrient">
+								<li>Fiber 3g</li> 
+								<li>Sugars 4g</li>
+							</ul>
+							<li><span class="nutrientTitle">Protein</span> 10g</li>
+						</ul> 
+					</div> 
+				</div> 
+			</div> 
+			<div class="RSDetails"> 
+				<div class="RSTimes"> 
+					<div class="RSHead"> 
+						Prep time:&nbsp; 
+						<time itemprop="prepTime" datetime="PT5M">5 mins</time> 
+					</div> 
+					<div class="RSHead"> 
+						Cook time:&nbsp; <time itemprop="cookTime" datetime="PT15M">15 mins</time> 
+					</div> 
+					<div class="RSHead"> 
+						Total time:&nbsp; <time itemprop="totalTime" datetime="PT20M">20 mins</time> 
+					</div> 
+				</div> 
+			</div> 
+		</div>
+	</div>
+
+<div class="col-sm-9 col-sm-pull-3" markdown="1">
+
+Ingredients: 
+
+The main stuff:
+
+* 2.5 pounds Chicken
+* Big bag of frozen veggines. We like Asian or stir-fry blend.
+
+The spicy peanut sauce:
+
+* 1/2 cup of natural peanut butter 
+* Soy sauce
+* Coconut Milk (may substitute chicken or veggie stock)
+* Siracha (to taste)
+* Artificial Sweetner (optional)
+
+Spices:
+
+* Chili Powder
+* Salt 
+* Pepper
+
+</div>
+</div>
 
 </div>
