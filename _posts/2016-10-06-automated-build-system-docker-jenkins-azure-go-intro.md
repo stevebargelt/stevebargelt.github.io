@@ -98,3 +98,7 @@ Please do understand that I am not an expert in any technology or concept in thi
 [Link to the Video](https://youtu.be/L-ncELRLDYg)
 
 [github](http://github.com/stevebargelt)
+
+### The Series
+ 
+{% include abs.md %}
