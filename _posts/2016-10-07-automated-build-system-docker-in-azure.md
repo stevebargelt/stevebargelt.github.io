@@ -13,13 +13,7 @@ tags: [jenkins, cd, ci, docker, azure, riot games]
 ### Introduction
 Welcome to part one of my Automated Build System (ABS) series. Where we are building a fully functional, hands-off build system using Docker and Jenkins... all in Azure. 
 
-* [Part 0: Introduction]({% post_url 2016-10-06-automated-build-system-docker-jenkins-azure-go-intro %})
-* Part 1: Docker in a VM in Azure
-* Part 2: Jenkins and Ephemeral Slave Nodes in Docker in Azure
-* Part 3: Secure Private Docker Registry in Azure and Securing Jenkins
-* Part 4: Scripting Jenkins and the Jenkins API
-* Part 5: Creating Dockhand with Go (the self-service build environment tool)
-* Part 6: Using the system. A simple DotNetCore app   
+{% include abs.md %}
 
 In this first installment we will be setting up Docker in Azure on a Linux VM. Of course, there are several ways to accomplish this and I'm only going to walk through one possible solution in this tutorial. After we get this system up and running smoothly, I will explore other options for setting up the base system such as using the Azure command line interface (CLI).
 
@@ -28,7 +22,6 @@ I know Microsoft recently announced that Windows Server 2016 will include Docker
 Here is a diagram of what we will have at the end of this tutorial:
 
 [![build system diagram](/assets/buildSystem_01_small.png){: .img-responsive }](/assets/buildSystem_01.png){: .img-blog }
-
 
 It may not look like much but it's the foundation for the system we are going to build. 
 
