@@ -31,21 +31,22 @@ The video tutorial:
 
 Lets get rollin'.
 
-### More Inbound Security Rules 
+### Inbound Security Rules 
 
 The first thing we will need to do is open two ports in Azure to our VM, 443 for https communication to Jenkins and 5000 for https communication to our Docker registry. We can do this in the Azure portal like we did in part one... 
 
-1. Click the resource group, dockerBuild 
-2. Now we need to open a port for registry communication...
-3. select our network security group
-4. select Inbound Security Rules
+1. Click the resource group (dockerBuild) 
+3. Click our network security group (dockerbuild-nsg)
+4. Select Inbound Security Rules
 5. click add
-6. we are going to name this rule - allow-docker-registry
+6. Name this rule - allow-docker-registry
 7. Port 5000
 8. Leave the rest at their defaults 
 9. Click okay
 
-And now add a rule for SSL communication:
+[![Azure Inbound Security Rule for port 5000](/assets/abs-03-azure-security-docker-registry-small.png){: .img-responsive }](/assets/abs-03-azure-security-docker-registry.png){: .img-blog }
+
+And now add a rule for SSL communication to Jenkins:
 
 1. Click Add again...
 1. We are going to name this rule - allow-https
@@ -53,6 +54,7 @@ And now add a rule for SSL communication:
 1. Leave the rest at their defaults 
 1. Click okay
 
+[![Azure Inbound Security Rule for port 443](/assets/abs-03-azure-secutry-add-https-small.png){: .img-responsive }](/assets/abs-03-azure-secutry-add-https.png){: .img-blog }
 
 Or we can use the Azure Command Line Interface (CLI) from a Docker container like we did in part 1.5
 
@@ -87,6 +89,8 @@ Select our Resource group...
 * Click Storage Account
 * Click Create
 
+[![](/assets/abs-03-azure-storage-account-small.png){: .img-responsive }](/assets/abs-03-azure-storage-account.png){: .img-blog }
+
 * name: dockerbuildregistry
 * Deployment Model: Resource Manager
 * Account Kind: Select "Blob Storage"
@@ -100,7 +104,9 @@ Select our Resource group...
 
 Click create
 
-OF course we can create storage account via the CLI instead:
+[![](/assets/abs-03-azure-create-blob-storage-small.png){: .img-responsive }](/assets/abs-03-azure-create-blob-storage.png){: .img-blog }
+
+Of course we can create storage account via the CLI instead:
 
 ~~~~
 
@@ -145,11 +151,13 @@ Run the letsencrypt container to do it's thing - we are mapping port 80 to 80 an
 
 docker run  -v /etc/letsencrypt:/etc/letsencrypt -p 80:80 -p 443:443 -it --name letsencrypt letsencrypt
 
+root@b7d70459bd4c:/#
+
 ~~~~
 
 This runs and attaches us to our letsencrypt container. Now we can ask letsencrypt to create the certificates for our domain names (remember back in part one - I insisted you use your own personal custom domain names? You won't be able to complete this if you are using a domain that ends in azure.com or cloudapp.com since you do not own those root domains).
 
-My jenkins DNS is dockerbuild.harebrained-apps.com 
+The domain name we are using for Jenkins in this tutorial is: dockerbuild.harebrained-apps.com 
 
 ~~~~
 
@@ -157,12 +165,13 @@ cd letsencrypt
 ./letsencrypt-auto certonly --standalone -d dockerbuild.harebrained-apps.com
 
 ~~~~
-Enter email address
+
+Enter your email address
 Agree to Terms of service
 
 Congratulations message!
 
-One more time for our private registry, our Docker registry DNS is dockerregistry.harebrained-apps.com:
+One more time for our private registry, our Docker registry domain name is: dockerregistry.harebrained-apps.com:
 
 ~~~~
 
@@ -178,22 +187,20 @@ exit
 
 ~~~~
 
-As the letsencrypt messages say letsencrypt put all of our certificate files in... 
+As the letsencrypt messages say letsencrypt put all of our certificate files in
 
-
+~~~~ 
 /etc/letsencrypt/live/dockerbuild.harebrained-apps.com
-	and
 /etc/letsencrypt/live/dockerregistry.harebrained-apps.com
+~~~~
 
-> these are the files letsencrypt makes in the above folder
+> The files letsencrypt makes in the above folder
 	cert.pem: Your domain's certificate
 	chain.pem: The Let's Encrypt chain certificate
 	fullchain.pem: cert.pem and chain.pem combined
 	privkey.pem: Your certificate's private key
 
-
-We need to tell NGINX where to find fullchain.pem and privkey.pem for both domains/servers.
- First lets edit  registry.conf...
+We need to tell NGINX where to find fullchain.pem and privkey.pem for both domains/servers - we do that through the .conf files. First lets edit registry.conf:
 
 ~~~~
 
@@ -201,7 +208,11 @@ cd jenkins-nginx/conf
 nano registry.conf
 
 ~~~~
-IMG 
+Replace <YOUR DOMAIN NAME> with, you guessed it, your domain name.
+
+[![](/assets/abs-03-nano-registry-conf-small.png){: .img-responsive }](/assets/abs-03-nano-registry-conf.png){: .img-blog }
+
+CTRL-X, Y, Enter to save the changes
 
 Next we will edit jenkins.conf 
 
@@ -210,26 +221,41 @@ Next we will edit jenkins.conf
 nano jenkins.conf
 
 ~~~~
-IMG 
+We need to do a bit more work in jenkins.conf since it was alrady in use supporting our http instance of Jenkins. 
 
+1. Switch listen 80; to listen 443;
+1. Add a server name: server_name dockerbuild.harebrained-apps.com;
+1. Right before access_log off; Add
+    1. ssl on;
+    1. ssl_certificate /etc/letsencrypt/live/dockerbuild.harebrained-apps.com/fullchain.pem;
+    1. ssl_certificate_key /etc/letsencrypt/live/dockerbuild.harebrained-apps.com/privkey.pem;
 
-Now we need to create the basic authentication using htpassword tool, which we must install first from apache utils...
+>obviously replacing dockerbuild.harebrained-apps.com with your Jenkins domain name!
+
+CTRL-X, Y, Enter to save the changes
+
+[![](/assets/abs-03-nano-jenkins-conf-small.png){: .img-responsive }](/assets/abs-03-nano-jenkins-conf.png){: .img-blog }
+ 
+Now we need to create the basic authentication file using htpassword tool, which we must install first from apache utils...
 
 ~~~~
 
-cd ..
-
 sudo apt install apache2-utils
+
+~~~~
+
+Now we will create a user names "dockeruser"
+
+~~~~
 mkdir ~/jenkinsDocker/jenkins-nginx/files
 cd ~/jenkinsDocker/jenkins-nginx/files
-
 htpasswd -c registry.password dockeruser
 
 ~~~~
 
-Enter the password twice... and we have our user. You can add other users to the file as needed. We will explore hooking the up to other auth methods in a later tutorial if there is interest.
+Enter a password twice... and we have our user. You can add other users to the file as needed. We will explore hooking the up to other auth methods in a later tutorial, if there is interest.
 
-Next we need to modify the jenkins-ngix dockerfile:
+Next we need to modify the jenkins-ngix dockerfile to copy registry.conf and registry.password into the image and we need to sxpose port 443:
 
 ~~~~
 
@@ -239,14 +265,17 @@ nano Dockerfile
 ~~~~
 
 UNCOMMENT:
-#COPY conf/registry.conf /etc/nginx/conf.d/registry.conf
-#COPY files/registry.password /etc/nginx/conf.d/registry.password
-And:
-#EXPOSE 443
 
-IMG
+1. COPY conf/registry.conf /etc/nginx/conf.d/registry.conf
+1. COPY files/registry.password /etc/nginx/conf.d/registry.password
+1. EXPOSE 443
 
-Finally we need to edit our docker-compose.yml to add the registry container to our project so it will startup when our build system starts up... 
+[![](/assets/abs-03-nano-nginx-dockerfile-before-small.png){: .img-responsive }](/assets/abs-03-nano-nginx-dockerfile-before.png){: .img-blog }
+[![](/assets/abs-03-nano-nginx-dockerfile-small.png){: .img-responsive }](/assets/abs-03-nano-nginx-dockerfile.png){: .img-blog }
+
+CTRL-X, Y, Enter to save the changes
+
+Finally we need to edit our docker-compose.yml to add the registry container to our project so docker knows how to build it.
 
 ~~~~
 
@@ -255,37 +284,37 @@ nano docker-compose.yml
 
 ~~~~
 
-Remember I said we are going to hook our registry up to our Azure blob storage account... here is where we do that. We ned to KEY from our storage account... 
+[![](/assets/abs-03-nano-docker-compose-before-small.png){: .img-responsive }](/assets/abs-03-nano-docker-compose-before.png){: .img-blog }
 
-Uncomment the entire registry section under nginx links... uncomment:
+1. Uncomment the entire registry section under nginx links
+1. Uncomment `- registry:registry` under the NGINX heading.
 
-- registry:registry
+I said we are going to hook our registry up to our Azure blob storage account... here is where we do that. We ned to KEY from our storage account... 
 
-* Add account name "dockerbuildregistry"
+In the Azure portal, click on your Resource Group (dockerbuild) -> 
+Click your registry storage account (dockerbuildregistry) -> 
+Click Access Keys
+Copy one of the access keys 
 
-> PORTAL
+[![](/assets/abs-03-azure-reg-storage-accesskeys-small.png){: .img-responsive }](/assets/abs-03-azure-reg-storage-accesskeys.png){: .img-blog }
 
-copy key 1 access key 
 We can also get this form the azure CLI (I'm sure you are not surprised!)
 
-**NEW TERMINAL WINDOW** 
+~~~~
+
+docker exec -it azureCli azure storage account keys list  dockerbuildregistry --resource-group dockerbuild
 
 ~~~~
 
-docker ps -a
+* PASTE The access key
 
-~~~~
+CTRL-X, Y, Enter to save the changes
 
-* copy KEY 1
-* exit TERM window 2 
-* place the cursor for the key and PASTE
-* CTRL-X to exit Y to save changes
-* ENTER on file name
-
+[![](/assets/abs-03-nano-docker-compose-small.png){: .img-responsive }](/assets/abs-03-nano-docker-compose.png){: .img-blog }
 
 ### Restart our Jenkins Docker deployment
 
-We will use docker compose to restart our system. This time we will add the registry container to the "up" command
+We will use docker compose to rebuild our NGINX image and then to restart our system. This time we will add the registry container to the "up" command
 
 ~~~~
 
@@ -307,7 +336,7 @@ We can see that jenkins_nginx, jenkins_master, and jenkins_data are all running 
 
 ~~~~
 
-curl -iv https://dockeruser:steel2000@dockerregistry.harebrained-apps.com/v2/
+curl -iv https://dockeruser:<PASSWORD>dockerregistry.harebrained-apps.com/v2/
 
 ~~~~
 
@@ -319,58 +348,50 @@ Manage Jenkins > Configure  > System
 Jenkins Location
  	Jenkins URL
 
-Now let's see if we can push an image to our new (secure) registry
+Now let's see if we can push an image to our new (secure) registry. First let's fetch the Image ID of our jenkins-slave image and tag that image with our registry:
+
+[![](/assets/abs-03-cli-jenkins-slave-image-id-small.png){: .img-responsive }](/assets/abs-03-cli-jenkins-slave-image-id.png){: .img-blog }
 
 ~~~~
 
-docker images
+docker tag 5d3aa1c6c363 dockerregistry.harebrained-apps.com/jenkins-slave
 
-$ docker images
-REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-jenkins_nginx         latest              384b54f02274        About an hour ago   56.94 MB
-letsencrypt           latest              43bc8b12c968        About an hour ago   478.9 MB
-jenkins_slave         latest              4c92758529cd        20 hours ago        713.1 MB
-jenkins_master        latest              4e26a37f5f49        20 hours ago        302.4 MB
-jenkins_data          latest              8e3431915555        20 hours ago        196.8 MB
-jenkins_slavedotnet   latest              d12919ef962a        20 hours ago        1.056 GB
-...
+~~~~
 
-docker tag 
+[![](/assets/abs-03-cli-slave-image-tagged-small.png){: .img-responsive }](/assets/abs-03-cli-slave-image-tagged.png){: .img-blog }
 
-**COPY ID**
-**PASTE** dockerregistry.harebrained-apps.com/jenkins-slave
+Next we will login to our registry on the command line and then push this image to our private registry where it will be stored in our Azure blob storage
+
+~~~~
 
 docker login dockerregistry.harebrained-apps.com 
 	dockeruser
-	steel2000
+	<PASSWORD>
 
 docker push dockerregistry.harebrained-apps.com/jenkins-slave
 
 ~~~~
 
-Lets pop back over into the Azure portal to check out our storage account... dockerbuildregistry, click overview, blobs - here you can see we now have a blob container named "registry" 
+If we pop over into the Azure portal we can see the image and layers in the dockerbuildregistry storage account.
+Click overview
+Click blobs - here you can see we now have a blob container named "registry"
+Click registry
+You can then drill-down into the folder structure to see the image (jenkins-slave) 
 
-~~~~
+[![](/assets/abs-03-azure-registry-image-small.png){: .img-responsive }](/assets/abs-03-azure-registry-image.png){: .img-blog }
 
-docker rmi -f dockerregistry.harebrained-apps.com/jenkins-slave
-docker pull dockerregistry.harebrained-apps.com/jenkins-slave
+and drill down even further to see the layer blobs.
 
-~~~~
+[![](/assets/abs-03-azure-registry-layers-small.png){: .img-responsive }](/assets/abs-03-azure-registry-layers.png){: .img-blog }
 
-we have now successfully pushed our dot net build slave to our private registry 
-
-> celebrate, make a little glove, get down tonight
-
-In this tutorial we created a secure docker registry and also secured our Jenkins installation with TLS certs from letsencrypt. We have all of the major pieces of our build system in place! In the next installment we will talk about custom scripts in Jenkins - and exposing those scripts in an API-like fashion. 
-
-Image link:
-[![](/assets/-small.png){: .img-responsive }](/assets/.png){: .img-blog }
-
+This is pretty cool. We have now successfully pushed our build slave image to our private registry! 
 
 ### Conclusion and Next Steps
-In this part of the tutorial we've 
+In this tutorial we created a secure docker registry and also secured our Jenkins installation with TLS certs from letsencrypt. 
 
-In the next installment we are going to  
+Our private Docker registry is a fundamental piece of our final build system puzzle. Our tool, Dockhand, will push our dev teams' build images to the private registry so that they are available to the rest of our build system. Once in the registry we can pull those images to our Jenkins master(s) so they can be used as Jenkins slave nodes for build jobs.   
+
+We now have all of the major pieces of our build system in place! We have one more small piece of work to do before we can let this loose on our dev teams. In the next installment we will talk about custom scripts in Jenkins and exposing those scripts in an API-like fashion. Dockhand will need to be able to create Docker templates and check that build labels and build job names are unique. Since the our of the box Jenkins API doesnt' expose all of this to us, we will be exposing that functionality through a custom Jenkins script. 
 
 ### Resources
 Video Tutorial: []()
