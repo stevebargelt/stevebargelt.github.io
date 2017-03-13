@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Automated Build System Part 03: Secure Docker Registry in Azure'
+title: '     Secure Docker Registry in Azure'
 subtitle: 
 portfolio:  
 thumbimage: '/assets/azure_docker_jenkins_small.png'
