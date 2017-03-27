@@ -4,7 +4,7 @@
 * [Part 1.75: Docker in a VM in Azure via shell scripts and the Azure CLI]({% post_url 2016-11-28-abs-azure-docker-vm-setup-scripts %}) 
 * [Part 2: Custom Jenkins Container and Ephemeral Slave Nodes]({% post_url 2016-10-31-automated-build-system-part-custom-containers %})
 * [Part 3: Secure Private Docker Registry in Azure and Securing Jenkins]({% post_url 2016-12-05-build-system-secure-docker-registry-in-azure %})
-* Part 4: Scripting Jenkins and the Jenkins API
+* [Part 4: Scripting Jenkins and the Jenkins API]({% post_url 2017-03-27-abs-04-scripting-jenkins %})
 * Part 5: A sample ASP.Net Core App - Manual Build System Use
 * Part 6: Creating Dockhand with Go (the self-service build environment tool)
 * Part 7: A sample ASP.Net Core App - Automated Build System Use

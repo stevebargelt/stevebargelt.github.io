@@ -20,6 +20,8 @@ future: false
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
+
 text:
   pagination:
     newer: 'Newer Posts'

@@ -37,7 +37,7 @@ The video tutorial for Part 4:
 <br/>
 
 ### Scripting Jenkins with Scriptler
-Luckily the missing pieces of the Jenkins API are things that we can easily accomplish with the [Scriptler](https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin) plugin for Jenkins and some Groovy script. If you used the jenkins-master image from the repo at [github.com/stevebargelt/jenkinsDocker](https://github.com/stevebargelt/jenkisnDocker) then the Scriptler plugin is already installed in Jenkins.  
+Luckily the missing pieces of the Jenkins API are things that we can easily accomplish with the [Scriptler](https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin) plugin for Jenkins and some Groovy script. If you used the jenkins-master image from the repo at [github.com/stevebargelt/jenkinsDocker](https://github.com/stevebargelt/jenkinsDocker) then the Scriptler plugin is already installed in Jenkins.  
 
 ### Get Labels
 Why do we need a unique label for our each Docker Template? We want each dev team to create their own Docker images for their build environments. Jenkins needs to link that image to a particular build job. We do that through the use of a build label. 
@@ -69,14 +69,14 @@ In the browser:
 * Click Scriptler
 * Copy and paste the contents of getLabels.groovy into the Jenkins interface (I did this from the CLI)
 
-~~~~
+```shell
 
 ssh absadmin@abs.harebrained-apps.com
 cd jenkinsDocker
 cd jenkinsScriptler
 cat getLabels.Groovy
 
-~~~~
+```
 
 * Click Submit
 * Click on the Edit button
@@ -97,11 +97,11 @@ The second script we need to add allows us to create the Docker template with an
 
 Back to your SSH terminal window...
 
-~~~~
+```shell
 
 cat createDockerTemplate.Groovy
 
-~~~~
+```
 * Copy and paste the content of createDockerTemplate.groovy into the Jenkins interface
 * Click Submit
 
@@ -125,7 +125,7 @@ In Postman Click the + to create a new tab (CMD-T)
 
 The URL to the scripts will be your domain + /scriptler/run/<ScriptName> so in my case for GetLabels 
 
-https://dockerbuild.harebrained-apps.com/scriptler/run/getLabels.groovy
+`https://dockerbuild.harebrained-apps.com/scriptler/run/getLabels.groovy`
 
 * Enter the URL into the large text box
 * Click Params
@@ -134,12 +134,15 @@ https://dockerbuild.harebrained-apps.com/scriptler/run/getLabels.groovy
 * Click Authorization
 * Enter your Jenkins Username and Password
 * Click Update Request
+[![](/assets/abs-04-006-postman-auth-small.png){: .img-responsive }](/assets/abs-04-006-postman-auth.png){: .img-blog }
 * Now you can click Send
 * You should see the results... if you've strictly followed along witht his tutorial you should see one label returned "testslave"
 
+[![](/assets/abs-04-008-postman-getlabel-result-small.png){: .img-responsive }](/assets/abs-04-008-postman-getlabel-result.png){: .img-blog }
+
 Next we will test creating a template:
 
-My URL is https://dockerbuild.harebrained-apps.com/scriptler/run/createDockerTemplate.groovy
+My URL is `https://dockerbuild.harebrained-apps.com/scriptler/run/createDockerTemplate.groovy`
 
 * Enter the URL into the large text box
 * Click Params
@@ -149,26 +152,25 @@ My URL is https://dockerbuild.harebrained-apps.com/scriptler/run/createDockerTem
 * Value: testlabel2
 * Key: image
 * Value: jenkins-slave
+[![](/assets/abs-04-009-postman-createTemplate-params-small.png){: .img-responsive }](/assets/abs-04-009-postman-createTemplate-params.png){: .img-blog }
+
 * Click Authorization
 * Enter your Jenkins Username and Password
 * Click Update Request
 * Now you can click Send
 
-If we go back to Jenkins
+If we go back to Jenkins:
+
 * Manage Jenkins
 * Configure System
 * Scroll down we can see the new Docker Template has been created
 
-[![](/assets/abs-04-014-jenkins-template-label-small.png){: .img-responsive }](/assets/abs-04-014-jenkins-template-label.png){: .img-blog }
+&nbsp;
 
 ### Conclusion
 In this segment of the tutorial we've added two small pieces of the system and we finally have the building blocks in place for our system to function as intended. 
 
 So thank you for watching part four of my automated build system tutorial today we've added to the API functionality of Jenkins with groovy scripts and the Scriptler plugin. 
 
-In the next installment of this tutorial we will create the custom Go application Dockhand. Dockhand is the application that developers will interact with to self-serve thier builds. It is the yearn that weaves all of the other parts of the system together. 
+In the next installment of this tutorial we will create the custom Go application Dockhand. Dockhand is the application that developers will interact with to self-serve their builds. It is the yearn that weaves all of the other parts of the system together. 
 
-[![](/assets/-small.png){: .img-responsive }](/assets/.png){: .img-blog }
-[![](/assets/-small.png){: .img-responsive }](/assets/.png){: .img-blog }
-[![](/assets/-small.png){: .img-responsive }](/assets/.png){: .img-blog }
-[![](/assets/-small.png){: .img-responsive }](/assets/.png){: .img-blog }

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '     Secure Docker Registry in Azure'
+title: 'Automated Build System 03: Secure Docker Registry in Azure'
 subtitle: 
 portfolio:  
 thumbimage: '/assets/azure_docker_jenkins_small.png'
@@ -61,7 +61,7 @@ And now add a rule for SSL communication to Jenkins:
 
 Alternatively we can use the Azure Command Line Interface (CLI) from a Docker container like we did in part 1.5
 
-~~~~
+```shell
 
 docker exec -it azureCli azure network nsg rule create --protocol tcp \
     --direction inbound \
@@ -81,7 +81,7 @@ docker exec -it azureCli azure network nsg rule create --protocol tcp \
     --nsg-name dockerBuild-nsg \
     --name allow-https
 
-~~~~
+```
 
 ### Blob Storage Account
 
@@ -112,11 +112,12 @@ Click create
 
 Of course we can create storage account via the CLI instead:
 
-~~~~
+```shell
 
 docker exec -it azureCli azure storage account create --resource-group dockerbuild --kind BlobStorage --sku-name LRS --access-tier Hot --location westus2 dockerbuildregistry
 
-~~~~
+```
+
 <p>&nbsp;</p>
 
 >### ABS Setup scripts
@@ -125,46 +126,46 @@ docker exec -it azureCli azure storage account create --resource-group dockerbui
 
 ## Get Legit with letsencrypt
 
-In [part 2]({% post_url 2016-10-31-automated-build-system-part-custom-containers %}) we cloned my [jenkinsDocker github repo](https://githib.com/stevebargelt/jenkinsDocker) to our VM. The repo includes a Dockerfile definition for a [letsencrypt](https://letsencrypt.org) container. That's right we are going to run letsencrypt in a Docker container on our VM to obtain our TLS certificates! In order to do that we need to stop our running containers... remember that we have the Data container so that all of our Jenkins settings, including our cloud setup, Docker templates, and build jobs will persist!!
+In [part 2]({% post_url 2016-10-31-automated-build-system-part-custom-containers %}) we cloned my [jenkinsDocker github repo](https://github.com/stevebargelt/jenkinsDocker) to our VM. The repo includes a Dockerfile definition for a [letsencrypt](https://letsencrypt.org) container. That's right we are going to run letsencrypt in a Docker container on our VM to obtain our TLS certificates! In order to do that we need to stop our running containers... remember that we have the Data container so that all of our Jenkins settings, including our cloud setup, Docker templates, and build jobs will persist!!
 
 ### Stop our containers
 
-~~~~
+```shell
 
 ssh dockeruser@dockerbuild.harebrained-apps.com
 cd jenkinsDocker
 docker-compose -p jenkins stop
 
-~~~~
+```
 
 ### Build and run the letsencrypt container
 
 We need to build the letsencrypt image:
 
-~~~~
+```shell
 
 cd letsencrypt
 docker build -t letsencrypt .
 
-~~~~
+```
 
 And then create the local directory for letsencrypt to place our certificate goodies in:
 
-~~~~
+```shell
 
 mkdir -p /etc/letsencrypt
 
-~~~~
+```
 
 Run the letsencrypt container to do it's thing - we are mapping the local etc/letsencrypt to the same directory in the container and we are mapping port 80 to 80 and 443 to 443
 
-~~~~
+```shell
 
 docker run  -v /etc/letsencrypt:/etc/letsencrypt -p 80:80 -p 443:443 -it --name letsencrypt letsencrypt
 
 root@b7d70459bd4c:/#
 
-~~~~
+```
 
 ### Create our certificates
 
@@ -172,12 +173,12 @@ This runs and attaches us to our letsencrypt container. Now we can ask letsencry
 
 The domain name we are using for Jenkins in this tutorial is: dockerbuild.harebrained-apps.com - obviously replace this with your own domain name.
 
-~~~~
+```shell
 
 cd letsencrypt
 ./letsencrypt-auto certonly --standalone -d dockerbuild.harebrained-apps.com
 
-~~~~
+```
 
 1. Enter your email address
 1. Agree to Terms of service
@@ -186,28 +187,28 @@ Congratulations message!
 
 One more time for our private registry, our Docker registry domain name is: dockerregistry.harebrained-apps.com - again you are going to replace this with your own domain name.
 
-~~~~
+```shell
 
 ./letsencrypt-auto certonly --standalone -d dockerregistry.harebrained-apps.com
 
-~~~~
+```
 
 Sweet - all certificate'd up! We can exit out of our letsencrypt container
 
-~~~~
+```shell
 
 exit
 
-~~~~
+```
 
 As the letsencrypt messages say letsencrypt put all of our certificate files in
 
-~~~~ 
+```shell 
 
 /etc/letsencrypt/live/dockerbuild.harebrained-apps.com
 /etc/letsencrypt/live/dockerregistry.harebrained-apps.com
 
-~~~~
+```
 
 The files letsencrypt makes in the above folder:
 
@@ -220,12 +221,12 @@ The files letsencrypt makes in the above folder:
 
 We need to tell NGINX where to find fullchain.pem and privkey.pem for both domains/servers - we do that through NGINX .conf files. First lets edit registry.conf:
 
-~~~~
+```shell
 
 cd jenkins-nginx/conf
 nano registry.conf
 
-~~~~
+```
 
 Replace <YOUR DOMAIN NAME> with, you guessed it, your domain name in three locations in this file. 
 
@@ -235,11 +236,11 @@ CTRL-X, Y, Enter to save the changes
 
 Next we will edit jenkins.conf 
 
-~~~~
+```shell
 
 nano jenkins.conf
 
-~~~~
+```
 
 We need to do a bit more work in jenkins.conf since it was already in use supporting our http instance of Jenkins. 
 
@@ -258,23 +259,23 @@ CTRL-X, Y, Enter to save the changes
 
 Now we need to create the basic authentication file using htpassword tool, which we must install first from apache utils...
 
-~~~~
+```shell
 
 sudo apt install apache2-utils
 
-~~~~
+```
 
 ### Create a basic auth user
 
 Now we will create a user names "dockeruser"
 
-~~~~
+```shell
 
 mkdir ~/jenkinsDocker/jenkins-nginx/files
 cd ~/jenkinsDocker/jenkins-nginx/files
 htpasswd -c registry.password dockeruser
 
-~~~~
+```
 
 Enter a password twice... and we have our user. You can add other users to the file as needed. 
 
@@ -282,12 +283,12 @@ Enter a password twice... and we have our user. You can add other users to the f
 
 Next we need to modify the jenkins-ngix Dockerfile to copy registry.conf and registry.password into the image and we need to expose port 443:
 
-~~~~
+```shell
 
 cd jenkins-nginx
 nano Dockerfile 
 
-~~~~
+```
 
 Uncomment:
 
@@ -304,12 +305,12 @@ CTRL-X, Y, Enter to save the changes
 
 Finally we need to edit our docker-compose.yml to add the registry container to our project so docker knows how to build it.
 
-~~~~
+```shell
 
 cd ..
 nano docker-compose.yml
 
-~~~~
+```
 
 [![](/assets/abs-03-nano-docker-compose-before-small.png){: .img-responsive }](/assets/abs-03-nano-docker-compose-before.png){: .img-blog }
 
@@ -327,11 +328,11 @@ Copy one of the access keys
 
 We can also get this form the azure CLI (I'm sure you are not surprised!)
 
-~~~~
+```shell
 
 docker exec -it azureCli azure storage account keys list  dockerbuildregistry --resource-group dockerbuild
 
-~~~~
+```
 
 * PASTE The access key
 
@@ -343,29 +344,29 @@ CTRL-X, Y, Enter to save the changes
 
 We will use docker compose to rebuild our NGINX image and then to restart our system. This time we will add the registry container to the "up" command
 
-~~~~
+```shell
 
 docker-compose -p jenkins rm nginx
 docker rmi jenkins_nginx:latest
 docker-compose -p jenkins up -d nginx data master registry
 
-~~~~
+```
 
 Lets see what containers we have running 
 
-~~~~
+```shell
 
 docker ps -a
 
-~~~~
+```
 
 We can see that jenkins_nginx, jenkins_master, and jenkins_data are all running just like before, and now registry is also running. Let's test our registry out over https.   
 
-~~~~
+```shell
 
 curl -iv https://dockeruser:<PASSWORD>dockerregistry.harebrained-apps.com/v2/
 
-~~~~
+```
 
 See if we can get to Jenkins over https : 
 
@@ -381,17 +382,17 @@ Now let's see if we can push an image to our new (secure) registry. First let's 
 
 [![](/assets/abs-03-cli-jenkins-slave-image-id-small.png){: .img-responsive }](/assets/abs-03-cli-jenkins-slave-image-id.png){: .img-blog }
 
-~~~~
+```shell
 
 docker tag 5d3aa1c6c363 dockerregistry.harebrained-apps.com/jenkins-slave
 
-~~~~
+```
 
 [![](/assets/abs-03-cli-slave-image-tagged-small.png){: .img-responsive }](/assets/abs-03-cli-slave-image-tagged.png){: .img-blog }
 
 Next we will login to our registry on the command line and then push this image to our private registry where it will be stored in our Azure blob storage
 
-~~~~
+```shell
 
 docker login dockerregistry.harebrained-apps.com 
 	dockeruser
@@ -399,7 +400,7 @@ docker login dockerregistry.harebrained-apps.com
 
 docker push dockerregistry.harebrained-apps.com/jenkins-slave
 
-~~~~
+```
 
 If we pop over into the Azure portal we can see the image and layers in the dockerbuildregistry storage account.
 
