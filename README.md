@@ -8,6 +8,7 @@ From a command line, simply:
 new_post "this is a new post title"
 new_draft "this is a new post title"
 publish_draft this-is-a-new-post.md
+note_to_draft "path to note" "this is a new post"
 
 ~~~~
 [Source for scripts](https://github.com/stevebargelt/scripts/) 
@@ -104,5 +105,4 @@ https://phlow.github.io/feeling-responsive/
 https://github.com/johnotander/pixyll
 
 http://pixyll.com
-
-
+wh

@@ -20,7 +20,7 @@ Welcome back to my Automated Build System series of tutorials. In part one of th
 
 This blog post and related video will be short on commentary since the principles from Part one apply. This is just a quick and easy way to get Docker up and running in a VM in Azure without touching the Azure Portal web interface. 
 
-The video tutorial for thie part 1.5:
+The video tutorial for Part 1.5:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/wFDuW1TQBbY" frameborder="0" allowfullscreen></iframe>
 <br/>
 

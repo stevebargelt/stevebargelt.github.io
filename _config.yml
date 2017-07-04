@@ -2,9 +2,9 @@
 title: Steve Bargelt
 email: steve@bargelt.com
 description: > # this means to ignore newlines until "baseurl:"
-        Copyright &copy; Steve Bargelt 2016
+        Copyright &copy; Steve Bargelt 2017
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://stevebargelt.com" # the base hostname & protocol for your site
+url: "http://bargelt.com" # the base hostname & protocol for your site
 twitter_username: stevebargelt
 github_username:  stevebargelt
 linkedin_url: stevebargelt
@@ -20,6 +20,8 @@ future: false
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
+
 text:
   pagination:
     newer: 'Newer Posts'
