@@ -2,7 +2,6 @@
 layout: post
 title: 'Automated Build System Part 04: Scripting Jenkins'
 subtitle: 
-subtitle: 
 portfolio:  
 thumbimage: '/assets/azure_docker_jenkins_small.png'
 image: '/assets/azure_docker_jenkins.png'
