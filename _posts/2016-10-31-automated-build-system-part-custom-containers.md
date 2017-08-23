@@ -142,9 +142,10 @@ We need to copy and paste the Client Key, Client Certificate and Server CA Certi
 cd ~/tlsBuild 
 pbcopy < ~/tlsBuild/key.pem
 pbcopy < ~/tlsBuild/cert.pem
-pbcopy < ~/tlsBuild/server-cert.pem
+pbcopy < ~/tlsBuild/ca.pem
 
 ~~~~
+> NOTE: an earlier version of this post incorrectly had server-cert.pem in that last slot. It should be ca.pem. In Part 05 this will cause issues if not changed. (Updated 2017-08-23)
 
 I'm going to add an ID of dockerTLS and a Description of Docker TLS Certs. This is what my final TLS credential screen looks like:
 

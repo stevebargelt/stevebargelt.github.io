@@ -368,6 +368,8 @@ curl -iv https://dockeruser:<PASSWORD>dockerregistry.harebrained-apps.com/v2/
 
 ```
 
+> NOTE: Due to a change made recently the docker registry will return a 503 error because a "Health Check" fails with an empty registry store (like our Azure storage). I've written a new blog post on how to remedy this situation - link coming soon. (Updated 2017-08-23)
+
 See if we can get to Jenkins over https : 
 
 * https://dockerbuild.harebrained-apps.com/ 
